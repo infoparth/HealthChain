@@ -19,7 +19,7 @@ export const Login = (props) => {
     const navigate = useNavigate();
 
 
-    const {contract, isLoading: contractLoading} = useContract(
+    const {contract} = useContract(
 
         address,
         record_abi,
@@ -35,7 +35,7 @@ export const Login = (props) => {
 
     console.log(wallAdd);
 
-    const {data: isPatient, isLoading: patientLoad, error: patientErr} = useContractRead(
+    const {data: isPatient} = useContractRead(
         contract, 
         "checkPatient",
         [],
@@ -46,7 +46,7 @@ export const Login = (props) => {
 
     console.log('patient' , isPatient);
 
-    const {data: isDoctor, isLoading: docLoad, error: docErr} = useContractRead(
+    const {data: isDoctor} = useContractRead(
         contract, 
         "checkDoc",
         [],
@@ -73,7 +73,7 @@ export const Login = (props) => {
                             
                             
                         } else if (isDoctor === true){
-                            navigate("/docotr");
+                            navigate("/doctor");
                             
                         } else {
                             navigate("/register");
@@ -113,7 +113,7 @@ export const Login = (props) => {
             
         </div>
         
-        <button className="link-btn" onClick={() => navigate('/register')}>Don't have an account? Register here.</button>
+        <button className="link-btn" onClick={() => navigate('/doctor')}>Don't have an account? Register here.</button>
         </div>
         </div>
     )

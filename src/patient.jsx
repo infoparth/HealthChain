@@ -2,14 +2,6 @@ import React  from 'react';
 import './Navbar.css';
 import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
-import useInst from "./useinstance";
-import { 
-  useContractRead,
-  useContractWrite,
-  MediaRenderer,
-  useAddress
-} from '@thirdweb-dev/react';
-import { useState } from 'react';
   
 function Patient () {
 

@@ -1,11 +1,9 @@
 import React  from 'react';
 import '../Navbar.css';
-import { useNavigate } from 'react-router-dom';
 import useInst from "../useinstance";
 import { 
   useContractRead,
   useContractWrite,
-  MediaRenderer,
   useAddress
 } from '@thirdweb-dev/react';
 import { useState } from 'react';
@@ -46,9 +44,13 @@ export default function Access() {
 
     const handleAddDoctor = async () => {
 
-        add_doc({
+        const doc_add = await add_doc({
           args: [newDoctorAddress]
         });
+
+        if(doc_add){
+          alert('Doctor Added');
+        }
       }
 
   const handleAddressChange = (event) => {
