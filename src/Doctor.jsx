@@ -8,6 +8,55 @@ import {
 } from '@thirdweb-dev/react';
 import useInst from './useinstance';
 
+function ChildComponent({ input }) {
+
+  console.log('input', input[0]);
+  console.log('input', input[1]);
+  
+
+  const contract = input[1];
+
+  console.log('contract_child', contract);
+
+  const address = useAddress();
+
+  const wallAdd = input[0];
+
+  console.log('address', address);
+  // Use the useContractRead hook with the provided inputs
+  const {data: record_list} = useContractRead(
+    contract,
+     "getDocuments",
+     [wallAdd]
+     );
+
+  console.log('docs', record_list);
+  if(record_list !== undefined){
+  // Render the contract data or any other content
+  return (
+    <div>
+       <div>
+            <ul>
+              {record_list.map((url, index) => (
+                  <MediaRenderer
+                  src= {url}
+                  alt= {url}
+                />
+              ))}
+          </ul>
+          </div>
+    </div>
+  );
+}
+else{
+  return(
+    <div>
+      <h3>No Records found</h3>
+    </div>
+  )
+}
+}
+
 export function Doctor(){
 
   const [selectedPatient, setSelectPatient] = useState(undefined);
@@ -25,61 +74,15 @@ export function Doctor(){
     [address]
   )
 
-  console.log('patient_list', patient_list);
+     const view = async(pat_address) => {   //This function is used to view documents of a particular patient, after clicked
 
-  const {data: user_details} = useContractRead(
-    contract,
-    "getUserDetails",
-  );
-
-  const {data: record_list} = useContractRead(
-    contract,
-    "getDocuments",
-    [selectedPatient],
-    {
-      from: address
-    }
-  )
-
-  console.log('user_deets', user_details);
-
-  
-  
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  const getUser = async(arg) => {
-    // user_details({
-    //   args: [arg],
-    // })
-  }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-     const view = (pat_address) => {   //This function is used to view documents of a particular patient, after clicked
-
-      console.log('inside view',pat_address);
-
-      setSelectPatient(pat_address);
-
-      console.log('patient', selectedPatient);
-
-      if(selectedPatient !== null){
-        return (
-          <div>
-            <ul>
-              {record_list.map((url, index) => (
-                  <MediaRenderer
-                  src= {url}
-                  alt= {url}
-                />
-              ))}
-          </ul>
-          </div>
-        )
-      }
+      setSelectPatient(pat_address)
+      
      }
 
+    // const view = async() => {
+    //   setSelectedRecord(mutateAsync({args: [selectedPatient], }))
+    // }
 const handleRecordChange = (event) => {
   setSelectedRecord(event.target.value);
 };
@@ -98,16 +101,17 @@ if(patient_list !== undefined && patient_list.length > 0 ){
       <ul>
         {patient_list.map((user, index) => (
           <li key={index} onClick={() => view(user)} onChange={handleRecordChange}>
-            {/* {getUser(address_pat)} */}
-            {/* {user.name}, {user.age}, {user.mob_no} */}
-            {/* {patient_list[index]} */}
             {user}
           </li>
         ))}
       </ul>
       </div>
-      
+      {selectedPatient !== undefined && (
+        <ChildComponent input={[selectedPatient, contract]} />
+      )}
       </div>
+      
+      
       </div>
     )
               }
